@@ -1,0 +1,11 @@
+{
+  "node_count": 3,
+  "replication_factor": 2,
+  "partition_strategy": "md5(product_id) % node_count",
+  "primary_key_distribution": {
+    "1": 62,
+    "2": 69,
+    "3": 69
+  },
+  "invalid_records": 0
+}
