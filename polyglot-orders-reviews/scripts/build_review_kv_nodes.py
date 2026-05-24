@@ -11,10 +11,9 @@ NODES_DIR = DATA_DIR / "nodes"
 
 REVIEWS_FILE = DATA_DIR / "product_reviews.json"
 
-
+#Hàm băm cố định 
 def stable_hash(value):
     return int(hashlib.md5(value.encode("utf-8")).hexdigest(), 16)
-
 
 def build_review_kv_nodes(node_count=3, replication_factor=2):
     NODES_DIR.mkdir(exist_ok=True)
