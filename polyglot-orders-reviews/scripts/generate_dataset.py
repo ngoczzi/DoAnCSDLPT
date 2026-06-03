@@ -163,6 +163,7 @@ def main():
     print(f"Number of products: {NUM_PRODUCTS}")
     print(f"Number of orders: {NUM_ORDERS}")
     print(f"Number of reviews: {NUM_REVIEWS}")
+    print(f"Number of customers: {NUM_CUSTOMERS}")
 
 
 if __name__ == "__main__":
