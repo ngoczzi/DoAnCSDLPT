@@ -20,15 +20,46 @@ OUTPUT_DIR = BASE_DIR / "output"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
+def print_scalability_table(rows):
+    print("\nScalability Test Results")
+    print("=" * 120)
+
+    print(
+        f"{'Nodes':<8} | "
+        f"{'RF':<4} | "
+        f"{'Avg Keys/Node':<15} | "
+        f"{'Max Keys':<10} | "
+        f"{'Min Keys':<10} | "
+        f"{'Query Time (ms)':<16} | "
+        f"{'Node Reads':<10}"
+    )
+
+    print("-" * 120)
+
+    for row in rows:
+        print(
+            f"{row['node_count']:<8} | "
+            f"{row['replication_factor']:<4} | "
+            f"{row['avg_primary_keys_per_node']:<15.2f} | "
+            f"{row['max_primary_keys_on_node']:<10} | "
+            f"{row['min_primary_keys_on_node']:<10} | "
+            f"{row['query_time_ms']:<16.2f} | "
+            f"{row['node_file_reads']:<10}"
+        )
+
+    print("=" * 120)
+
+
 def run_scalability_test():
     rows = []
 
     for node_count in [2, 3, 4, 5]:
-        print(f"Testing with {node_count} nodes...")
+        print(f"\nTesting with {node_count} nodes...")
 
         build_review_kv_nodes(node_count=node_count, replication_factor=2)
 
         order_repository = OrderRepository(DATA_DIR / "orders.csv")
+
         review_store = DistributedReviewStore(
             nodes_dir=DATA_DIR / "nodes",
             simulated_latency=0.01
@@ -46,7 +77,6 @@ def run_scalability_test():
             metadata = json.load(file)
 
         distribution = metadata["primary_key_distribution"]
-
         key_counts = list(distribution.values())
 
         rows.append({
@@ -66,7 +96,9 @@ def run_scalability_test():
         writer.writeheader()
         writer.writerows(rows)
 
-    print(f"Saved {output_file}")
+    print_scalability_table(rows)
+
+    print(f"\nSaved {output_file}")
 
 
 if __name__ == "__main__":
